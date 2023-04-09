@@ -1,8 +1,11 @@
-import react, { useEffect, useRef } from 'react';
+import react, { useEffect, useRef, useContext } from 'react';
+import SearchContext from '../SearchContext';
+import highlight from '../highlightSearchString';
 import './User.scss';
 
 const User = (props) => {
     const { display_name, profile_image } = props;
+    const { searchString } = useContext(SearchContext);
     const imgRef = useRef(null);
 
     useEffect(() => {
@@ -23,7 +26,7 @@ const User = (props) => {
     return (
         <div className="user">
             <img className="user__image" ref={imgRef} />
-            {display_name}
+            {highlight(display_name, searchString)}
         </div>
     );
 };

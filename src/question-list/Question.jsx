@@ -1,11 +1,14 @@
-import react from 'react';
+import react, { useContext } from 'react';
+import SearchContext from '../SearchContext';
+import highlight from '../highlightSearchString';
 import classNames from 'classnames';
 import he from 'he';
 import User from './User';
 import './Question.scss';
 
 const Question = (props) => {
-    const { owner, title, link, score, view_count, answer_count, accepted_answer_id, searchString } = props;
+    const { owner, title, link, score, view_count, answer_count, accepted_answer_id } = props;
+    const { searchString } = useContext(SearchContext);
     const isMinusScore = score < 0;
     const isAccepted = !!accepted_answer_id;
     return (
@@ -15,7 +18,7 @@ const Question = (props) => {
                     {score}
                 </div>
                 <div className='question__main'>
-                    <div className='question__main__title'>{he.decode(title)}</div>
+                    <div className='question__main__title'>{highlight(he.decode(title), searchString)}</div>
                     <div className='question__main__ans-and-view'>
                         <div className={classNames([
                             'question__main__ans-and-view__answer',

@@ -1,11 +1,12 @@
 'use strict';
 
-import { useEffect, useState, useRef } from 'react';
+import { useEffect, useState, useRef, createContext } from 'react';
 import Question from './question-list/Question';
 import Tag from './tag/Tag';
 import he from 'he';
 import Loading from './loading/Loading';
 import SearchBar from './search-bar/SearchBar';
+import SearchContext from './SearchContext';
 import './App.scss';
 
 const getTaggedString = tags => {
@@ -70,8 +71,8 @@ function App() {
     setTags(newTags);
     getQuestions(getTaggedString(newTags));
   };
-  const onSearch = searchString => {
-    setSearchString(searchString.toLowerCase());
+  const onSearch = str => {
+    setSearchString(str.toLowerCase());
   };
   const checkStringIsMatched = targetString => {
     if (typeof targetString !== 'string') {
@@ -84,7 +85,7 @@ function App() {
       return null;
     }
     const matchedTags = tags.filter(tag => checkStringIsMatched(tag.name));
-    return matchedTags.map(tag => <Tag key={tag.name} onTagClick={handleTagClick} {...tag} searchString={searchString} />);
+    return matchedTags.map(tag => <Tag key={tag.name} onTagClick={handleTagClick} {...tag} />);
   };
   const renderQuestions = () => {
     if (!questions || !questions.length) {
@@ -95,26 +96,28 @@ function App() {
     return matchedQuestions.map(question => <Question key={question.question_id} {...question} searchString={searchString} />);
   };
   return (
-    <div className="App">
-      <div className='header'>
-        <h1>Stack Overflow Questions</h1>
-        <SearchBar onSearch={onSearch} />
-      </div>
-      <div className='main-section'>
-        <div className='main-section__tags'>
-          {renderTags()}
+    <SearchContext.Provider value={{ searchString }}>
+      <div className="App">
+        <div className='header'>
+          <h1>Stack Overflow Questions</h1>
+          <SearchBar onSearch={onSearch} />
+        </div>
+        <div className='main-section'>
+          <div className='main-section__tags'>
+            {renderTags()}
 
+          </div>
+          <div className='main-section__question-list'>
+            {renderQuestions()}
+          </div>
         </div>
-        <div className='main-section__question-list'>
-          {renderQuestions()}
-        </div>
+        {!searchString && (
+          <div className='loading-observer' ref={observerRef}>
+            <Loading />
+          </div>
+        )}
       </div>
-      {!searchString && (
-        <div className='loading-observer' ref={observerRef}>
-          <Loading />
-        </div>
-      )}
-    </div>
+    </SearchContext.Provider>
   );
 }
 

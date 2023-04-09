@@ -92,12 +92,12 @@ function App() {
         <h1>Stack Overflow Questions</h1>
         <SearchBar onSearch={onSearch} />
       </div>
-      <div className='main'>
-        <div className='main__tags'>
+      <div className='main-section'>
+        <div className='main-section__tags'>
           {renderTags()}
 
         </div>
-        <div className='main__question-list'>
+        <div className='main-section__question-list'>
           {renderQuestions()}
         </div>
       </div>

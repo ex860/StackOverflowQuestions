@@ -7,20 +7,26 @@
     padding-bottom: 16px;
 }
 
-.main {
+.main-section {
     position: relative;
-    padding: 164px 256px;
+    padding: 164px 256px 0;
+
+    &__tags {
+        text-align: center
+    }
 
     &__question-list {
         margin-top: 16px;
     }
 
     @media screen and (max-width: 1200px) {
-        padding: 164px 128px;
+        padding-left: 128px;
+        padding-right: 128px;
     }
 
     @media screen and (max-width: 876px) {
-        padding: 164px 64px;
+        padding-left: 64px;
+        padding-right: 64px;
     }
 }
 

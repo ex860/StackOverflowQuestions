@@ -16,21 +16,27 @@ function App() {
   const [questions, setQuestions] = useState([]);
   const [tags, setTags] = useState([]);
   const [searchString, setSearchString] = useState('');
+  const [currentPage, setCurrentPage] = useState(0);
   const observerRef = useRef(null);
-  const getQuestions = (taggedString, pagesize = 20) => {
-    fetch(`https://api.stackexchange.com/2.3/questions?pagesize=${pagesize}&order=desc&sort=activity&tagged=${taggedString}&site=stackoverflow`)
+  const getQuestions = (taggedString, page = 1, resetQuestionList = false) => {
+    fetch(`https://api.stackexchange.com/2.3/questions?page=${page}&pagesize=20&order=desc&sort=activity&tagged=${taggedString}&site=stackoverflow`)
       .then(res => res.json())
       .then(result => {
-        setQuestions(questions.concat(result.items));
+        if (Array.isArray(result?.items)) {
+          setQuestions(resetQuestionList ? result.items : questions.concat(result.items));
+          setCurrentPage(page);
+        }
       });
   };
   const firstFetch = () => {
     fetch('https://api.stackexchange.com/2.3/tags?pagesize=10&order=desc&sort=popular&site=stackoverflow')
       .then(res => res.json())
       .then(result => {
-        const tags = result.items.map((item, index) => ({ ...item, isSelected: !index }));
-        setTags(tags);
-        getQuestions(tags[0].name);
+        if (Array.isArray(result?.items)) {
+          const tags = result.items.map((item, index) => ({ ...item, isSelected: !index }));
+          setTags(tags);
+          getQuestions(tags[0]?.name);
+        }
       });
   };
   useEffect(() => {
@@ -41,7 +47,7 @@ function App() {
       entries.forEach(entry => {
         if (entry.isIntersecting && questions.length) {
           observer.unobserve(entry.target);
-          getQuestions(getTaggedString(tags));
+          getQuestions(getTaggedString(tags), currentPage + 1);
         }
       });
     };

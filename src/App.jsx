@@ -69,7 +69,6 @@ function App() {
       return tag;
     });
     setTags(newTags);
-    getQuestions(getTaggedString(newTags));
   };
   const onSearch = str => {
     setSearchString(str.toLowerCase());
@@ -91,9 +90,16 @@ function App() {
     if (!questions || !questions.length) {
       return null;
     }
-    const matchedQuestions = questions.filter(question =>
-      checkStringIsMatched(he.decode(question?.title)) || checkStringIsMatched(question?.owner?.display_name));
-    return matchedQuestions.map(question => <Question key={question.question_id} {...question} searchString={searchString} />);
+    const matchedQuestions = questions.filter(question => {
+      if (!Array.isArray(question.tags)) {
+        return false;
+      }
+      const tagNameMap = new Map(question.tags.map(tag => [tag, true]));
+      const selectedTagNames = tags.map(tag => tag.isSelected && tag.name).filter(Boolean);
+      const isMatchedAllTags = selectedTagNames.every(tagName => tagNameMap.has(tagName));
+      return isMatchedAllTags && (checkStringIsMatched(he.decode(question?.title)) || checkStringIsMatched(question?.owner?.display_name));
+    });
+    return matchedQuestions.map(question => <Question key={question.question_id} {...question} />);
   };
   return (
     <SearchContext.Provider value={{ searchString }}>

@@ -46,17 +46,17 @@ function App() {
     const callback = (entries) => {
       entries.forEach(entry => {
         if (entry.isIntersecting && questions.length) {
-          observer.unobserve(entry.target);
+          loadingObserver.unobserve(entry.target);
           getQuestions(getTaggedString(tags), currentPage + 1);
         }
       });
     };
-    const observer = new IntersectionObserver(callback, {});
+    const loadingObserver = new IntersectionObserver(callback, {});
     if (!searchString) {
-      observer.observe(observerRef.current);
+      loadingObserver.observe(observerRef.current);
     }
     return () => {
-      observer.disconnect();
+      loadingObserver.disconnect();
     };
   }, [questions, searchString]);
 

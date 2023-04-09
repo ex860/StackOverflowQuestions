@@ -1,0 +1,29 @@
+.header {
+    position: fixed;
+    background-color: white;
+    width: 100%;
+    z-index: 1;
+    text-align: center;
+    padding-bottom: 16px;
+}
+
+.main {
+    position: relative;
+    padding: 164px 256px;
+
+    &__question-list {
+        margin-top: 16px;
+    }
+
+    @media screen and (max-width: 1200px) {
+        padding: 164px 128px;
+    }
+
+    @media screen and (max-width: 876px) {
+        padding: 164px 64px;
+    }
+}
+
+.loading-observer {
+    height: 20px;
+}

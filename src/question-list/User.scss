@@ -1,0 +1,10 @@
+.user {
+    display: flex;
+
+    &__image {
+        border-radius: 50%;
+        height: 20px;
+        width: 20px;
+        margin-right: 8px;
+    }
+}

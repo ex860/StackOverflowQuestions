@@ -4,7 +4,7 @@ import { useEffect, useState, useRef } from 'react';
 import Question from './question-list/Question';
 import Tag from './tag/Tag';
 import he from 'he';
-import LoadingMask from './loading-mask/LoadingMask';
+import Loading from './loading/Loading';
 import SearchBar from './search-bar/SearchBar';
 import './App.scss';
 
@@ -99,10 +99,13 @@ function App() {
         </div>
         <div className='main__question-list'>
           {renderQuestions()}
-          {/* <LoadingMask /> */}
         </div>
       </div>
-      <div className='loading-observer' ref={observerRef}></div>
+      {!searchString && (
+        <div className='loading-observer' ref={observerRef}>
+          <Loading />
+        </div>
+      )}
     </div>
   );
 }

@@ -52,11 +52,13 @@ function App() {
       });
     };
     const observer = new IntersectionObserver(callback, {});
-    observer.observe(observerRef.current);
+    if (!searchString) {
+      observer.observe(observerRef.current);
+    }
     return () => {
       observer.disconnect();
     };
-  }, [questions]);
+  }, [questions, searchString]);
 
   const handleTagClick = (tagName, isSelected) => {
     const newTags = tags.map(tag => {

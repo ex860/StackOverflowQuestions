@@ -1,3 +1,5 @@
+$mobile-window-size: 600px;
+
 .question {
     border-top: 1px solid #e6e6e6;
     padding: 16px 0 16px 64px;
@@ -48,6 +50,24 @@
             }
 
             &__view {}
+
+            @media screen and (max-width: $mobile-window-size) {
+                flex-direction: column;
+                align-items: flex-start;
+
+                &__answer {
+                    padding: 0;
+
+                    &--has-answer,
+                    &--accepted {
+                        padding: 0 8px;
+                    }
+                }
+
+                &__view {
+                    margin-top: 8px;
+                }
+            }
         }
 
         &__owner {
